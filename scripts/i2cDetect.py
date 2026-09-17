@@ -8,16 +8,17 @@ KNOWN_DEVICES = {
     0x28: 'BNO055 (IMU)',  # BNO055 default I2C address
     0x29: 'BNO055 (IMU)',  # BNO055 alternate address
     0x40: 'PCA9685 (PWM Breakout Board)',  # PCA9685 default I2C address
-    0x76: 'Bar02 (Depth)', # ms5837 default I2C address
-    0x48: "ADS1115 (AD Converter for pH)", # ADS1115 default
-    0x49: "ADS1115 (AD Converter for pH)", # ADS1115 if address pin is pulled to VCC
+    0x76: 'Bar02 (Depth)',  # ms5837 default I2C address
+    0x48: "ADS1115 (AD Converter for pH)",  # ADS1115 default
+    0x49: "ADS1115 (AD Converter for pH)",  # ADS1115 if address pin is pulled to VCC
 }
+
 
 def get_i2c_buses():
     return sorted(
-        int(dev.replace("i2c-", "")) 
-        for dev in os.listdir('/dev') if dev.startswith('i2c-')
+        int(dev.replace("i2c-", "")) for dev in os.listdir('/dev') if dev.startswith('i2c-')
     )
+
 
 def scan_bus(busnum):
     print(f"\nScanning I2C bus {busnum} (/dev/i2c-{busnum})...")
@@ -37,6 +38,7 @@ def scan_bus(busnum):
     except FileNotFoundError:
         print(f"  /dev/i2c-{busnum} not available.")
 
+
 def main():
     buses = get_i2c_buses()
     if not buses:
@@ -44,6 +46,7 @@ def main():
         return
     for busnum in buses:
         scan_bus(busnum)
+
 
 if __name__ == "__main__":
     main()

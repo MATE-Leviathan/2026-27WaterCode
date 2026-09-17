@@ -2,7 +2,7 @@
 Author(s): Everett Tucker
 Date Created: 1/10/2024
 Description: This is the main ros node for driving the robot.
-TODO: 
+TODO:
 * Create an auto stabalization system using the IMU data
 * Add subscribers for the depth sensor and external temp sensor
 * Test this in the water!
@@ -42,12 +42,12 @@ MIDPOINT_ANGLE = 90  # This is the stationary angle
 ANGLE_RANGE = 90  # This is the range from midpoint to max/min thrust
 
 # Defining Thruster Pins
-FRONTRIGHT = 0 # Index the front right thruster will be in the array
-MIDRIGHT = 5 # Index the middle right thruster will be in the array
-BACKRIGHT = 4 # Index the back right thruster will be in the array
-FRONTLEFT = 2 # Index the front left thruster will be in the array
-MIDLEFT = 3 # Index the middle left thruster will be in the array
-BACKLEFT = 1 # Index the back left thruster will be in the array
+FRONTRIGHT = 0  # Index the front right thruster will be in the array
+MIDRIGHT = 5  # Index the middle right thruster will be in the array
+BACKRIGHT = 4  # Index the back right thruster will be in the array
+FRONTLEFT = 2  # Index the front left thruster will be in the array
+MIDLEFT = 3  # Index the middle left thruster will be in the array
+BACKLEFT = 1  # Index the back left thruster will be in the array
 
 
 class DriveRunner(Node):
@@ -56,7 +56,6 @@ class DriveRunner(Node):
         threading.Thread(target=self.drive).start()
         global logger
         logger = self.get_logger()
-
 
     def drive(self):
         self.get_logger().info(f'Drive running with IMU {imu_init} and Joy {joy_init}')
@@ -124,7 +123,9 @@ def drivetrain_init():
 
     # Creating the Thrusters
     for i in range(NUM_MOTORS):
-        thrusters.append(servo.Servo(pca.channels[START_PIN + i], min_pulse=MIN_PULSE, max_pulse=MAX_PULSE))
+        thrusters.append(
+            servo.Servo(pca.channels[START_PIN + i], min_pulse=MIN_PULSE, max_pulse=MAX_PULSE)
+        )
 
     # Initializing Thrusters
     for thruster in thrusters:
@@ -138,6 +139,8 @@ Maps values in [-1, 1] to angles in [0, 180] with respect to sensitivity
 @param val the float value that you want to transform into an angle
 @param sensitivity should be a float in [0, 1], higher sensitivity means that controller inputs are mapped to a smaller range
 """
+
+
 def map_float_to_angle(val):
     angle = (val * ANGLE_RANGE) * sensitivity
     if angle > MOTOR_DEADZONE:
@@ -156,27 +159,29 @@ Furthermore, x rotation is roll, y is pitch, and z is yaw
 Z rotation is clockwise by definition
 X rotation is counterclockwise by definition
 """
+
+
 def write(x, y, z, x_rotation, y_rotation, z_rotation):
     ### Horizontal Motor Writing
     if abs(x) > CONTROLLER_DEADZONE or abs(y) > CONTROLLER_DEADZONE:  # Linear Movement in XY
         x *= -1  # Reversal to compensate for the non-standard basis
-        set_thruster(5, -1 * ONEOVERROOTTWO * (x + y)) # 5
-        set_thruster(3, ONEOVERROOTTWO * (x - y)) # 3
-        set_thruster(0, ONEOVERROOTTWO * (y - x)) # 0
-        set_thruster(1, ONEOVERROOTTWO * (y + x)) # 1
+        set_thruster(5, -1 * ONEOVERROOTTWO * (x + y))  # 5
+        set_thruster(3, ONEOVERROOTTWO * (x - y))  # 3
+        set_thruster(0, ONEOVERROOTTWO * (y - x))  # 0
+        set_thruster(1, ONEOVERROOTTWO * (y + x))  # 1
     elif abs(z_rotation) > CONTROLLER_DEADZONE:  # Yaw (Spin)
-        set_thruster(5, -z_rotation) # 5
-        set_thruster(3, z_rotation) # 3
-        set_thruster(1, -z_rotation) # 1
-        set_thruster(0, z_rotation) # 0
+        set_thruster(5, -z_rotation)  # 5
+        set_thruster(3, z_rotation)  # 3
+        set_thruster(1, -z_rotation)  # 1
+        set_thruster(0, z_rotation)  # 0
 
     ### Vertical Motor Writing
     if abs(z) > CONTROLLER_DEADZONE:  # Linear Movement in Z
-        set_thruster(2, z) # 2
-        set_thruster(4, z) # 4
+        set_thruster(2, z)  # 2
+        set_thruster(4, z)  # 4
     elif abs(x_rotation) > CONTROLLER_DEADZONE:  # Roll
-        set_thruster(2, x_rotation) # 2
-        set_thruster(4, -x_rotation) # 4
+        set_thruster(2, x_rotation)  # 2
+        set_thruster(4, -x_rotation)  # 4
 
 
 """
@@ -184,6 +189,8 @@ Sets the specified thruster with the given angle with respect to the change in a
 TODO: Add a compensator to prevent large changes in motor speed
 This likely involves keeping track of the previous angle and only changing it by some threshold
 """
+
+
 def set_thruster(index, value):
     thrusters[index].angle = map_float_to_angle(value)
 

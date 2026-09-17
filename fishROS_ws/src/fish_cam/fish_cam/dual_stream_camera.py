@@ -31,9 +31,7 @@ class DualStreamCamera(Node):
         self.video_device_id = int(self.get_parameter('video_device_id').value)
         self.frame_id = str(self.get_parameter('frame_id').value)
         capture_fps = float(self.get_parameter('capture_fps').value)
-        self.low_res_period = 1.0 / float(
-            self.get_parameter('low_res_fps').value
-        )
+        self.low_res_period = 1.0 / float(self.get_parameter('low_res_fps').value)
         self.low_res_width = int(self.get_parameter('low_res_width').value)
         self.low_res_height = int(self.get_parameter('low_res_height').value)
         self.jpeg_quality = int(self.get_parameter('jpeg_quality').value)
@@ -60,9 +58,7 @@ class DualStreamCamera(Node):
         self.cap.set(cv2.CAP_PROP_FPS, capture_fps)
 
         if not self.cap.isOpened():
-            raise RuntimeError(
-                f'Cannot open camera /dev/video{self.video_device_id}'
-            )
+            raise RuntimeError(f'Cannot open camera /dev/video{self.video_device_id}')
 
         self._last_low_res_publish = 0.0
         self.timer = self.create_timer(1.0 / capture_fps, self.publish_frame)

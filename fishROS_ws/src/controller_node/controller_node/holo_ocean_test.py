@@ -10,10 +10,7 @@ class AgentType(Enum):
     SURFACE_VESSEL = 2
 
 
-agent_keys = {
-    'bluerov': AgentType.BLUEROV,
-    'surface_vessel': AgentType.SURFACE_VESSEL
-}
+agent_keys = {'bluerov': AgentType.BLUEROV, 'surface_vessel': AgentType.SURFACE_VESSEL}
 
 
 class JoyToAgentCommand(Node):
@@ -44,16 +41,7 @@ class JoyToAgentCommand(Node):
         agent_cmd = AgentCommand()
         agent_cmd.header.frame_id = 'auv0'  # TODO: get from parameter
         # this goes down
-        agent_cmd.command = [
-            (0.),
-            (0.),
-            (10.),
-            (10.),
-            (10.),
-            (10.),
-            (0.0),
-            (0.0)
-        ]
+        agent_cmd.command = [(0.0), (0.0), (10.0), (10.0), (10.0), (10.0), (0.0), (0.0)]
         """
         agent_cmd.command = [
                 (900000000.0),

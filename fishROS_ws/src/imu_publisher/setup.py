@@ -9,11 +9,12 @@ setup(
     version='0.0.0',
     packages=[package_name],
     data_files=[
-        ('share/ament_index/resource_index/packages',
-            ['resource/' + package_name]),
+        ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*.launch.py'))),
-
+        (
+            os.path.join('share', package_name, 'launch'),
+            glob(os.path.join('launch', '*.launch.py')),
+        ),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -23,8 +24,6 @@ setup(
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
-        'console_scripts': [
-            'imu_pub = imu_publisher.imu_pub:main'
-        ],
+        'console_scripts': ['imu_pub = imu_publisher.imu_pub:main'],
     },
 )

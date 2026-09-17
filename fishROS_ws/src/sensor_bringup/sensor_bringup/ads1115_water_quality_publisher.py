@@ -36,20 +36,14 @@ class ADS1115WaterQualityPublisher(Node):
         self._init_ads1115()
         self.timer = self.create_timer(sample_period, self.timer_callback)
 
-        self.get_logger().info(
-            f'Publishing ADS1115 water-quality voltages on {topic}'
-        )
+        self.get_logger().info(f'Publishing ADS1115 water-quality voltages on {topic}')
 
     def _init_ads1115(self) -> None:
         try:
             board = importlib.import_module('board')
             busio = importlib.import_module('busio')
-            ads_module = importlib.import_module(
-                'adafruit_ads1x15.ads1115'
-            )
-            analog_module = importlib.import_module(
-                'adafruit_ads1x15.analog_in'
-            )
+            ads_module = importlib.import_module('adafruit_ads1x15.ads1115')
+            analog_module = importlib.import_module('adafruit_ads1x15.analog_in')
         except ImportError as exc:
             raise RuntimeError(
                 'Missing ADS1115 dependencies. Install board, busio, and '
@@ -70,21 +64,15 @@ class ADS1115WaterQualityPublisher(Node):
         analog_in = analog_module.AnalogIn
         self.tds_channel = analog_in(
             self.ads,
-            self._resolve_ads_channel(
-                int(self.get_parameter('tds_channel').value)
-            ),
+            self._resolve_ads_channel(int(self.get_parameter('tds_channel').value)),
         )
         self.turbidity_channel = analog_in(
             self.ads,
-            self._resolve_ads_channel(
-                int(self.get_parameter('turbidity_channel').value)
-            ),
+            self._resolve_ads_channel(int(self.get_parameter('turbidity_channel').value)),
         )
         self.ph_channel = analog_in(
             self.ads,
-            self._resolve_ads_channel(
-                int(self.get_parameter('ph_channel').value)
-            ),
+            self._resolve_ads_channel(int(self.get_parameter('ph_channel').value)),
         )
 
     @staticmethod
@@ -92,9 +80,7 @@ class ADS1115WaterQualityPublisher(Node):
         try:
             return getattr(board, pin_name)
         except AttributeError as exc:
-            raise ValueError(
-                f'board.{pin_name} is not available on this platform'
-            ) from exc
+            raise ValueError(f'board.{pin_name} is not available on this platform') from exc
 
     @staticmethod
     def _resolve_ads_channel(channel: int) -> int:

@@ -6,6 +6,7 @@ import numpy as np
 
 VIDEO_DEVICE = 4  # /dev/videoX
 
+
 class ExploreHDPub(Node):
     def __init__(self):
         super().__init__('compressed_image_publisher')
@@ -39,12 +40,14 @@ class ExploreHDPub(Node):
             self.publisher.publish(msg)
             self.get_logger().info("Published compressed frame")
 
+
 def main(args=None):
     rclpy.init(args=args)
     minimal_publisher = ExploreHDPub()
     minimal_publisher.publish_image()
     minimal_publisher.destroy_node()
     rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()

@@ -17,17 +17,19 @@ from rclpy.qos import QoSProfile, HistoryPolicy, ReliabilityPolicy, DurabilityPo
 
 # Final Global Variables
 # Thruster IDs are indexed in the same order as MOTOR_PINS.
+# fmt: off
 BACK_LEFT = 0      # z0000.50x
 MIDDLE_RIGHT = 1   # z0100.50x
 FRONT_RIGHT = 2    # z0200.50x
 MIDDLE_LEFT = 3    # z0300.50x
 BACK_RIGHT = 4     # z0600.50x
 FRONT_LEFT = 5     # z0700.50x
+# fmt: on
 MOTOR_PINS = [0, 1, 2, 3, 6, 7]
 ONEOVERROOTTWO = 1 / math.sqrt(2)
 CONTROLLER_DEADZONE = 0.05
-THRUST_SCALE_FACTOR = 0.8 #0.6 #0.83375
-INITAL_CLAW_Y = 0 # should actually be x rotation but I'm too lazy to change it
+THRUST_SCALE_FACTOR = 0.8  # 0.6 #0.83375
+INITAL_CLAW_Y = 0  # should actually be x rotation but I'm too lazy to change it
 INITIAL_CLAW_Z = 0
 SERIAL_PORT = '/dev/ttyACM1'
 SERIAL_BAUD = 115200
@@ -46,8 +48,10 @@ class DriveRunner(Node):
         )
 
         self.twist_sub = self.create_subscription(Twist, "twist", self.twist_callback, qos)
-        self.stab_sub = self.create_subscription(Twist, "stabilization", self.stabilization_callback, 10)
-        
+        self.stab_sub = self.create_subscription(
+            Twist, "stabilization", self.stabilization_callback, 10
+        )
+
         self.stabilization = 0.0
         self.last_stabilization_time = self.get_clock().now()
         self.stabilization_timeout_sec = 0.5
@@ -73,7 +77,6 @@ class DriveRunner(Node):
         self.get_logger().info(f'Using serial motor control on {self.port} @ {self.baud}')
 
         self.drivetrainInit()
-
 
     def drivetrainInit(self):
         # Hold neutral while the ESCs arm
@@ -126,7 +129,9 @@ class DriveRunner(Node):
         try:
             self.serial_conn.write(cmd.encode())
         except serial.SerialTimeoutException:
-            self.get_logger().warn('Pico is not reading, dropped a thruster frame', throttle_duration_sec=1.0)
+            self.get_logger().warn(
+                'Pico is not reading, dropped a thruster frame', throttle_duration_sec=1.0
+            )
         except serial.SerialException as e:
             # Pico unplugged or reset; close so the next flush tries to reopen
             self.get_logger().error(f'Thruster serial write failed: {e}', throttle_duration_sec=1.0)
@@ -139,8 +144,10 @@ class DriveRunner(Node):
 
     def watchdog(self):
         now = self.get_clock().now()
-        if self.last_twist_time is not None and \
-                (now - self.last_twist_time).nanoseconds * 1e-9 < self.twist_timeout_sec:
+        if (
+            self.last_twist_time is not None
+            and (now - self.last_twist_time).nanoseconds * 1e-9 < self.twist_timeout_sec
+        ):
             return
         if not self.twist_stale:
             self.get_logger().warn(f'No twist for {self.twist_timeout_sec}s, stopping thrusters')
@@ -168,27 +175,33 @@ class DriveRunner(Node):
             x_rotation = 0.0
 
         ### Horizontal Motor Writing: translation in XY plus yaw
-        self.set_thrusters_scaled({
-            BACK_RIGHT: -ONEOVERROOTTWO * (x - y) + z_rotation * 0.75,
-            FRONT_LEFT: ONEOVERROOTTWO * (x - y) + z_rotation * 0.75,
-            FRONT_RIGHT: -ONEOVERROOTTWO * (-y - x) - z_rotation * 0.75,
-            BACK_LEFT: ONEOVERROOTTWO * (-y - x) - z_rotation * 0.75,
-        })
+        self.set_thrusters_scaled(
+            {
+                BACK_RIGHT: -ONEOVERROOTTWO * (x - y) + z_rotation * 0.75,
+                FRONT_LEFT: ONEOVERROOTTWO * (x - y) + z_rotation * 0.75,
+                FRONT_RIGHT: -ONEOVERROOTTWO * (-y - x) - z_rotation * 0.75,
+                BACK_LEFT: ONEOVERROOTTWO * (-y - x) - z_rotation * 0.75,
+            }
+        )
 
         ### Vertical Motor Writing: linear Z plus roll. Positive linear.z is down.
         if z != 0.0 or x_rotation != 0.0:
-            self.set_thrusters_scaled({
-                MIDDLE_LEFT: -z + x_rotation,
-                MIDDLE_RIGHT: -z - x_rotation,
-            })
+            self.set_thrusters_scaled(
+                {
+                    MIDDLE_LEFT: -z + x_rotation,
+                    MIDDLE_RIGHT: -z - x_rotation,
+                }
+            )
         # Depth Hover with timeout
-        elif (self.get_clock().now() - self.last_stabilization_time).nanoseconds * 1e-9 < self.stabilization_timeout_sec:
+        elif (
+            self.get_clock().now() - self.last_stabilization_time
+        ).nanoseconds * 1e-9 < self.stabilization_timeout_sec:
             self.set_thruster(MIDDLE_LEFT, -self.stabilization)
             self.set_thruster(MIDDLE_RIGHT, -self.stabilization)
         else:
             self.set_thruster(MIDDLE_LEFT, 0.0)
             self.set_thruster(MIDDLE_RIGHT, 0.0)
-    
+
         self.flush_thrusters()
 
     def stabilization_callback(self, msg: Twist):
@@ -199,6 +212,7 @@ class DriveRunner(Node):
         if self.serial_conn.is_open:
             self.stop_thrusters()
             self.serial_conn.close()
+
 
 def main(args=None):
     rclpy.init(args=args)
@@ -215,6 +229,7 @@ def main(args=None):
         drive_runner.destroy_node()
         if rclpy.ok():
             rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()

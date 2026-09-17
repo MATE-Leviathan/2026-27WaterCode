@@ -7,6 +7,7 @@ Description: Handles interfacing with the camera and publishing the images conve
 """
 
 import rclpy
+
 # import imutils
 from rclpy.node import Node
 from std_msgs.msg import String
@@ -15,7 +16,7 @@ import cv2
 from cv_bridge import CvBridge
 
 
-VIDEO_DEVICE = 0 # /dev/videoX
+VIDEO_DEVICE = 0  # /dev/videoX
 
 
 class ExploreHDPub(Node):
@@ -33,16 +34,17 @@ class ExploreHDPub(Node):
     Special Cases:
         None
     """
+
     def __init__(self):
         super().__init__('camera2_publisher')
         self.publisher = self.create_publisher(Image, 'Image2', 10)
-        #self.get_logger().info(self.get_node_names_and_namespaces())
+        # self.get_logger().info(self.get_node_names_and_namespaces())
         self.declare_parameter('video_device_id', 0)
 
         VIDEO_DEVICE = self.get_parameter('video_device_id').get_parameter_value().integer_value
         print(f"Video device parameter is {VIDEO_DEVICE}")
         self.cap = cv2.VideoCapture(VIDEO_DEVICE)
-        
+
         # Frame is normally 1920 x 1080
         # self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920.0)
         # self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080.0)
@@ -55,9 +57,8 @@ class ExploreHDPub(Node):
         if not self.cap.isOpened():
             print("Cannot open camera")
             exit()
-        
-        self.timer = self.create_timer(0.05, self.publish_image)
 
+        self.timer = self.create_timer(0.05, self.publish_image)
 
     """
     Reads in the most recent image from the camera and publishes it to the topic 'Image' 
@@ -72,10 +73,11 @@ class ExploreHDPub(Node):
     Raises:
         Does not raise but will log error if unable to read frame from camera
     """
+
     def publish_image(self):
         # # essetnially while True but is ros shutdown safe
         # while rclpy.ok():
-            
+
         # Capture frame-by-frame
         ret, frame = self.cap.read()
 
@@ -85,7 +87,7 @@ class ExploreHDPub(Node):
         # if frame is read correctly ret is True
         if not ret:
             self.get_logger().error("Unable to read frame from camera")
-        
+
         # publishes the image converted to a ros message to the topic 'Image'
         self.publisher.publish(self.bridge.cv2_to_imgmsg(frame, "bgr8"))
 
@@ -93,7 +95,7 @@ class ExploreHDPub(Node):
 def main(args=None):
     rclpy.init(args=args)
     minimal_publisher = ExploreHDPub()
-    #minimal_publisher.publish_image()
+    # minimal_publisher.publish_image()
     rclpy.spin(minimal_publisher)
 
     minimal_publisher.destroy_node()
@@ -101,4 +103,4 @@ def main(args=None):
 
 
 if __name__ == '__main__':
-   main()
+    main()

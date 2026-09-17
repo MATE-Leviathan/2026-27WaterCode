@@ -13,6 +13,7 @@ import board
 # This is unused for now
 BAUD_RATE = 115200
 
+
 class TempPub(Node):
     def __init__(self):
         super().__init__('internal_temperature_publisher')
@@ -24,7 +25,6 @@ class TempPub(Node):
         timer_period = 0.02  # Should be 50 Hz
         self.timer = self.create_timer(timer_period, self.publish_temp_data)
 
-    
     def publish_temp_data(self):
         temp = self.sensor.temperature
 
@@ -47,4 +47,3 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
-

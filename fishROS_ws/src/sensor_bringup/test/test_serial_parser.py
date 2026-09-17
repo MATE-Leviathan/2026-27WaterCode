@@ -2,9 +2,7 @@ from sensor_bringup.serial_parser import parse_serial_json_line
 
 
 def test_parse_serial_json_line_extracts_numeric_and_string_fields():
-    parsed = parse_serial_json_line(
-        '{"temp_c":21.4,"ph":7.1,"status":"ok","wet":true}'
-    )
+    parsed = parse_serial_json_line('{"temp_c":21.4,"ph":7.1,"status":"ok","wet":true}')
 
     assert parsed.parse_ok
     assert parsed.error == ''

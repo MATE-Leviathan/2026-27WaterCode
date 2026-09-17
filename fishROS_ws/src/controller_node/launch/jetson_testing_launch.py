@@ -1,4 +1,4 @@
-""" 
+"""
 Launch File to set up Jetson nodes.
 Launches the cameras, depth sensor, drive runner, stabilization, the pH sensor, and the foxglove websocket
 
@@ -11,33 +11,38 @@ from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument, ExecuteProcess
 from launch.substitutions import LaunchConfiguration
 
+
 def generate_launch_description():
-    return LaunchDescription([
-        DeclareLaunchArgument('thruster_port', default_value='/dev/ttyACM1'),
-        Node(
-            package='fish_cam',
-            executable='DWE_exploreHD_pub',
-        ),
-        Node(
-            package='fish_cam',
-            executable='DWE_exploreHD_pub2',
-        ),
-        Node(
-            package='bar02_pub',
-            executable='bar02_pub',
-        ),
-        Node(
-            package='controller_node',
-            executable='drivetrain_node',
-            parameters=[{'port': LaunchConfiguration('thruster_port')}],
-        ),
-        Node(
-            package='stabilization_pub',
-            executable='stabilization_pub',
-        ),
-        Node(
-            package='ph_pub',
-            executable='ph_pub',
-        ),
-        ExecuteProcess(cmd=["ros2", "launch", "foxglove_bridge", "foxglove_bridge_launch.xml"]), # I found having the bridge on the jetson was faster
-    ])
+    return LaunchDescription(
+        [
+            DeclareLaunchArgument('thruster_port', default_value='/dev/ttyACM1'),
+            Node(
+                package='fish_cam',
+                executable='DWE_exploreHD_pub',
+            ),
+            Node(
+                package='fish_cam',
+                executable='DWE_exploreHD_pub2',
+            ),
+            Node(
+                package='bar02_pub',
+                executable='bar02_pub',
+            ),
+            Node(
+                package='controller_node',
+                executable='drivetrain_node',
+                parameters=[{'port': LaunchConfiguration('thruster_port')}],
+            ),
+            Node(
+                package='stabilization_pub',
+                executable='stabilization_pub',
+            ),
+            Node(
+                package='ph_pub',
+                executable='ph_pub',
+            ),
+            ExecuteProcess(
+                cmd=["ros2", "launch", "foxglove_bridge", "foxglove_bridge_launch.xml"]
+            ),  # I found having the bridge on the jetson was faster
+        ]
+    )

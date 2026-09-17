@@ -42,15 +42,11 @@ class AuxiliaryControl(Node):
         }
         self.left_trigger_axis = int(self.get_parameter("left_trigger_axis").value)
         self.right_trigger_axis = int(self.get_parameter("right_trigger_axis").value)
-        self.actuator_direction_pin = str(
-            self.get_parameter("actuator_direction_pin").value
-        ).zfill(2)
-        self.actuator_speed_pin = str(
-            self.get_parameter("actuator_speed_pin").value
-        ).zfill(2)
-        self.actuator_speed = max(
-            0.0, min(1.0, float(self.get_parameter("actuator_speed").value))
+        self.actuator_direction_pin = str(self.get_parameter("actuator_direction_pin").value).zfill(
+            2
         )
+        self.actuator_speed_pin = str(self.get_parameter("actuator_speed_pin").value).zfill(2)
+        self.actuator_speed = max(0.0, min(1.0, float(self.get_parameter("actuator_speed").value)))
 
         self.button_was_pressed = {pin: False for pin in self.servo_buttons}
         self.servo_at_max = {pin: False for pin in self.servo_buttons}
@@ -109,10 +105,7 @@ class AuxiliaryControl(Node):
         return 0 <= index < len(msg.buttons) and msg.buttons[index] == 1
 
     def _trigger_pressed(self, msg, index):
-        return (
-            0 <= index < len(msg.axes)
-            and msg.axes[index] < self.trigger_pressed_threshold
-        )
+        return 0 <= index < len(msg.axes) and msg.axes[index] < self.trigger_pressed_threshold
 
     def _write_command(self, pin, value):
         value = max(0.0, min(1.0, float(value)))

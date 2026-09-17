@@ -7,6 +7,7 @@ Description: Testing the calibration for the pwm signals
 from board import SCL, SDA
 import busio
 import time
+
 # Import the PCA9685 module.
 from adafruit_pca9685 import PCA9685
 from adafruit_motor import servo
@@ -22,12 +23,14 @@ pca.frequency = 450
 
 pca.channels[0].duty_cycle = 0xFFFF
 
+
 # This is the most important part of this operation
 # We cannot write a value outside of [0, 180], so we need another way to unlock the edges of the pwm range
 # We make the changes in the motor initialization, so this is just a standard linear map
 def map_value_to_angle(value):
     # return 93.909 * value + 103.3
     return value * 90 + 90
+
 
 """
 # I might mess around with the max and min pulse to get it to output a perfect [1100, 1900]
@@ -49,4 +52,3 @@ for i in range(3):
     print(f'Writing: {i * 90}')
     thruster.angle = i * 90
     time.sleep(3)
-

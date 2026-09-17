@@ -8,7 +8,6 @@ Subscribers: None
 Publishers: IMU
 """
 
-
 import rclpy
 import busio
 import time
@@ -20,8 +19,8 @@ from geometry_msgs.msg import Quaternion
 
 from board import SCL, SDA
 
-class IMUPub(Node):
 
+class IMUPub(Node):
     def __init__(self):
         # Creating the sensor
 
@@ -35,7 +34,6 @@ class IMUPub(Node):
 
         timer_period = 0.02
         self.timer = self.create_timer(timer_period, self.publishIMU)
-    
 
     def publishIMU(self):
         msg = Imu()
@@ -56,7 +54,7 @@ class IMUPub(Node):
 def main():
     rclpy.init()
     imu_publisher = IMUPub()
-    rclpy.spin(imu_publisher) #imu_publisher
+    rclpy.spin(imu_publisher)  # imu_publisher
     imu_publisher.destroy_node()
     rclpy.shutdown()
 

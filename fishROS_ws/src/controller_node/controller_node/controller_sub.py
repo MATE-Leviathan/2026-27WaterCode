@@ -6,7 +6,6 @@ Subscribers: Joy
 Publishers: Twist, Point
 """
 
-
 import rclpy
 import time
 from rclpy.node import Node
@@ -30,7 +29,7 @@ last_joy_time = 0.0
 axes = []
 buttons = []
 sensitivity = 1
-holding = False # if depth holding is on
+holding = False  # if depth holding is on
 old_press = 0
 left_trigger_axis = 2
 right_trigger_axis = 5
@@ -51,7 +50,6 @@ def button_value(index):
 
 
 class ControllerSub(Node):
-
     def __init__(self):
         # Creating the subscriber
         super().__init__('controller_subscriber')
@@ -65,7 +63,9 @@ class ControllerSub(Node):
         right_trigger_axis = int(self.get_parameter('right_trigger_axis').value)
 
         self.subscription = self.create_subscription(Joy, 'joy', self.listener_callback, 10)
-        self.hold_pub = self.create_publisher(Bool, 'stabilization_toggle', 10) # Bool publisher to toggle depth hold
+        self.hold_pub = self.create_publisher(
+            Bool, 'stabilization_toggle', 10
+        )  # Bool publisher to toggle depth hold
 
     def listener_callback(self, msg):
         """
@@ -114,12 +114,13 @@ class ControllerSub(Node):
             old_press = 1
             holding = not holding
             print(f"Holding = {holding}")
-            
+
             # Publish toggle state
             self.hold_pub.publish(Bool(data=holding))
-            
+
         if button_value(2) == 0:
             old_press = 0
+
 
 class TwistPub(Node):
     def __init__(self):
@@ -151,7 +152,7 @@ class TwistPub(Node):
 
     def publishTwist(self):
         # axes[0] left stick x
-        # axes[1] left stick y 
+        # axes[1] left stick y
         # Trigger axes rest at 1, pass through 0, and are fully pulled at -1.
 
         if not controller_init:
@@ -178,20 +179,15 @@ class TwistPub(Node):
 
         left_trigger_raw = axis_value(left_trigger_axis)
         right_trigger_raw = axis_value(right_trigger_axis)
-        left_trigger = self.trigger_amount(
-            self.trigger_axis_value(left_trigger_axis)
-        )
-        right_trigger = self.trigger_amount(
-            self.trigger_axis_value(right_trigger_axis)
-        )
+        left_trigger = self.trigger_amount(self.trigger_axis_value(left_trigger_axis))
+        right_trigger = self.trigger_amount(self.trigger_axis_value(right_trigger_axis))
         linear_z = left_trigger - right_trigger
 
         self.get_logger().debug(
-            f'Linear Z {linear_z} '
-            f'raw triggers L={left_trigger_raw} R={right_trigger_raw}'
+            f'Linear Z {linear_z} raw triggers L={left_trigger_raw} R={right_trigger_raw}'
         )
 
-        if abs(linear_z) > 0.08: # Deadzone
+        if abs(linear_z) > 0.08:  # Deadzone
             twist_message.linear.z = linear_z
         else:
             twist_message.linear.z = 0.0
@@ -200,7 +196,7 @@ class TwistPub(Node):
         twist_message.angular.x = 0.0
         twist_message.angular.y = 0.0
         twist_message.angular.z = -axis_value(3) * 0.8 * sensitivity
-        
+
         self.publisher.publish(twist_message)
 
 
@@ -210,7 +206,6 @@ class PointPub(Node):
         self.publisher = self.create_publisher(Point, "claw", 10)
         timer_period = 0.02
         self.timer = self.create_timer(timer_period, self.publishPoint)
-
 
     def publishPoint(self):
         if controller_init:

@@ -14,7 +14,10 @@ setup(
         # Include our package.xml file
         (os.path.join('share', package_name), ['package.xml']),
         # Include all launch files.
-        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*.launch.py'))),
+        (
+            os.path.join('share', package_name, 'launch'),
+            glob(os.path.join('launch', '*.launch.py')),
+        ),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -24,10 +27,10 @@ setup(
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
-    'console_scripts': [
-        'DWE_exploreHD_pub = fish_cam.DWE_exploreHD_pub:main',
-        'DWE_exploreHD_pub2 = fish_cam.DWE_exploreHD_pub2:main',
-        'dual_stream_camera = fish_cam.dual_stream_camera:main',
+        'console_scripts': [
+            'DWE_exploreHD_pub = fish_cam.DWE_exploreHD_pub:main',
+            'DWE_exploreHD_pub2 = fish_cam.DWE_exploreHD_pub2:main',
+            'dual_stream_camera = fish_cam.dual_stream_camera:main',
         ],
     },
 )

@@ -43,9 +43,7 @@ class SerialJsonPublisher(Node):
 
         self._thread = threading.Thread(target=self._read_loop, daemon=True)
         self._thread.start()
-        self.get_logger().info(
-            f'Reading serial JSON from {self.port} @ {self.baud} baud'
-        )
+        self.get_logger().info(f'Reading serial JSON from {self.port} @ {self.baud} baud')
 
     def _read_loop(self) -> None:
         while rclpy.ok() and not self._stop_event.is_set():

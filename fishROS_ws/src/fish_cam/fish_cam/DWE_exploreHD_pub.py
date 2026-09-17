@@ -7,6 +7,7 @@ Subscribers: None
 """
 
 import rclpy
+
 # import imutils
 from rclpy.node import Node
 from std_msgs.msg import String
@@ -15,7 +16,7 @@ import cv2
 from cv_bridge import CvBridge
 
 
-VIDEO_DEVICE = 4 # /dev/videoX
+VIDEO_DEVICE = 4  # /dev/videoX
 
 
 class ExploreHDPub(Node):
@@ -33,16 +34,17 @@ class ExploreHDPub(Node):
     Special Cases:
         None
     """
+
     def __init__(self):
         super().__init__('minimal_publisher')
         self.publisher = self.create_publisher(Image, 'Image', 10)
-        #self.get_logger().info(self.get_node_names_and_namespaces())
+        # self.get_logger().info(self.get_node_names_and_namespaces())
         self.declare_parameter('video_device_id', 4)
 
         VIDEO_DEVICE = self.get_parameter('video_device_id').get_parameter_value().integer_value
         print(f"Video device parameter is {VIDEO_DEVICE}")
         self.cap = cv2.VideoCapture(VIDEO_DEVICE)
-        
+
         # Frame is normally 1920 x 1080
         # self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920.0)
         # self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080.0)
@@ -55,7 +57,6 @@ class ExploreHDPub(Node):
         if not self.cap.isOpened():
             print("Cannot open camera")
             exit()
-
 
     """
     Reads in the most recent image from the camera and publishes it to the topic 'Image' 
@@ -70,6 +71,7 @@ class ExploreHDPub(Node):
     Raises:
         Does not raise but will log error if unable to read frame from camera
     """
+
     def publish_image(self):
         # essetnially while True but is ros shutdown safe
         while rclpy.ok():
@@ -83,10 +85,10 @@ class ExploreHDPub(Node):
             if not ret:
                 self.get_logger().error("Unable to read frame from camera")
                 break
-            
+
             # publishes the image converted to a ros message to the topic 'Image'
             self.publisher.publish(self.bridge.cv2_to_imgmsg(frame, "bgr8"))
-            #self.get_logger().info("published frame")
+            # self.get_logger().info("published frame")
 
 
 def main(args=None):
@@ -99,4 +101,4 @@ def main(args=None):
 
 
 if __name__ == '__main__':
-   main()
+    main()

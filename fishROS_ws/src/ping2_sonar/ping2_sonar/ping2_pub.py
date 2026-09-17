@@ -23,7 +23,7 @@ DEVICE = "/dev/ttyUSB0"
 
 class ImuPub(Node):
     """
-    The Ping2SonarPub object represents the publisher node for the ping2 sonar. 
+    The Ping2SonarPub object represents the publisher node for the ping2 sonar.
     It handles interfacing with the ping2 sonar and publishing the data to the topic 'Data'
 
     Args:
@@ -37,6 +37,7 @@ class ImuPub(Node):
     Special Cases:
         None
     """
+
     def __init__(self):
         super().__init__('minimal_publisher')
         self.publisher = self.create_publisher(Imu, 'IMUData', 10)
@@ -45,8 +46,8 @@ class ImuPub(Node):
 
         self.sensor = adafruit_bno055.BNO055_I2C(i2c, address=0x28)
         print(f'Current Temperature: {self.sensor.temperature}')
-        timer_period = 0.02 # seconds, should be 50hz
-        self.timer = self.create_timer(timer_period, self.read_and_publish_imu_data)            
+        timer_period = 0.02  # seconds, should be 50hz
+        self.timer = self.create_timer(timer_period, self.read_and_publish_imu_data)
 
     """
     Reads in the most recent data from the ping2 sonar and publishes it to the topic 'Data'
@@ -61,6 +62,7 @@ class ImuPub(Node):
     Raises:
         Does not raise but will log error if unable to read frame from ping2
     """
+
     def read_and_publish_imu_data(self):
         # Getting data from the sensor
         euler = self.sensor.euler
@@ -94,9 +96,9 @@ class ImuPub(Node):
         angular_velocity.y = a_vel[1]
         angular_velocity.z = a_vel[2]
         imu_msg.angular_velocity = angular_velocity
-        
+
         # Publish the IMU message
-        self.publisher.publish(imu_msg)        
+        self.publisher.publish(imu_msg)
 
 
 def main(args=None):
@@ -106,5 +108,6 @@ def main(args=None):
     minimal_publisher.destroy_node()
     rclpy.shutdown()
 
+
 if __name__ == '__main__':
-   main()
+    main()

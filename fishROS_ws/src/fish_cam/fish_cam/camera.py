@@ -7,10 +7,10 @@ Description: Handles interfacing with the camera and publishing the images conve
 import cv2
 
 
-VIDEO_DEVICE = 0 # /dev/videoX
+VIDEO_DEVICE = 0  # /dev/videoX
 
 
-class ExploreHDPub():
+class ExploreHDPub:
     """
     The ExploreHDPub object represents the publisher node for the camera. It handles interfacing with the camera and publishing the images converted to ros messages
 
@@ -25,12 +25,12 @@ class ExploreHDPub():
     Special Cases:
         None
     """
+
     def __init__(self):
         self.cap = cv2.VideoCapture(VIDEO_DEVICE)
         if not self.cap.isOpened():
             print("Cannot open camera")
             exit()
-
 
     """
     Reads in the most recent image from the camera and publishes it to the topic 'Image' 
@@ -45,6 +45,7 @@ class ExploreHDPub():
     Raises:
         Does not raise but will log error if unable to read frame from camera
     """
+
     def publish_image(self):
         counter = 0
         # essetnially while True but is ros shutdown safe
@@ -69,4 +70,4 @@ def main(args=None):
 
 
 if __name__ == '__main__':
-   main()
+    main()

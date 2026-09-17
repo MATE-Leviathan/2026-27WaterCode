@@ -60,31 +60,17 @@ class SonarMessageConverter(Node):
 
         # Create sonar subscriber and publisher
         self.sonar_subscription = self.create_subscription(
-            ImagingSonar,
-            input_topic,
-            self.convert_callback,
-            10
+            ImagingSonar, input_topic, self.convert_callback, 10
         )
 
-        self.sonar_publisher = self.create_publisher(
-            OculusPing,
-            output_topic,
-            10
-        )
+        self.sonar_publisher = self.create_publisher(OculusPing, output_topic, 10)
 
         # Create odometry subscriber and publisher
         self.odom_subscription = self.create_subscription(
-            Odometry,
-            odom_input_topic,
-            self.odom_callback,
-            10
+            Odometry, odom_input_topic, self.odom_callback, 10
         )
 
-        self.odom_publisher = self.create_publisher(
-            Odometry,
-            odom_output_topic,
-            10
-        )
+        self.odom_publisher = self.create_publisher(Odometry, odom_output_topic, 10)
 
         self.bridge = CvBridge()
         self.ping_id = 0
@@ -159,8 +145,9 @@ class SonarMessageConverter(Node):
 
             # Normalize to 0-255 range for visualization
             if image_2d.max() > 0:
-                image_normalized = ((image_2d - image_2d.min()) /
-                                   (image_2d.max() - image_2d.min()) * 255.0)
+                image_normalized = (
+                    (image_2d - image_2d.min()) / (image_2d.max() - image_2d.min()) * 255.0
+                )
             else:
                 image_normalized = np.zeros_like(image_2d)
 

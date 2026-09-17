@@ -4,6 +4,7 @@
 from board import SCL, SDA
 import busio
 import time
+
 # Import the PCA9685 module.
 from adafruit_pca9685 import PCA9685
 from adafruit_motor import servo
@@ -15,7 +16,7 @@ i2c_bus = busio.I2C(SCL, SDA)
 pca = PCA9685(i2c_bus)
 
 # Set the PWM frequency to 60hz.
-pca.frequency = 450 
+pca.frequency = 450
 
 # Set the PWM duty cycle for channel zero to 50%. duty_cycle is 16 bits to match other PWM objects
 # but the PCA9685 will only actually give 12 bits of resolution.
@@ -23,7 +24,7 @@ pca.frequency = 450
 thrusters = []
 for pin in range(5):
     thrusters.append(servo.Servo(pca.channels[pin], min_pulse=1141, max_pulse=1971))
-#thrusters.append(servo.Servo(pca.channels[16], min_pulse=1100, max_pulse=1900))
+# thrusters.append(servo.Servo(pca.channels[16], min_pulse=1100, max_pulse=1900))
 
 # Initializing Thrusters
 print("Initalizing...")
@@ -62,4 +63,3 @@ for thruster in continuous_thrusters:
     thruster.throttle = 0.5
 time.sleep(1)
 """
-
