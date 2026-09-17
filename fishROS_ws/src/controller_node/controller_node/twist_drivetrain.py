@@ -175,7 +175,7 @@ class DriveRunner(Node):
             BACK_LEFT: ONEOVERROOTTWO * (-y - x) - z_rotation * 0.75,
         })
 
-        ### Vertical Motor Writing: linear Z plus roll
+        ### Vertical Motor Writing: linear Z plus roll. Positive linear.z is down.
         if z != 0.0 or x_rotation != 0.0:
             self.set_thrusters_scaled({
                 MIDDLE_LEFT: -z + x_rotation,
@@ -183,8 +183,8 @@ class DriveRunner(Node):
             })
         # Depth Hover with timeout
         elif (self.get_clock().now() - self.last_stabilization_time).nanoseconds * 1e-9 < self.stabilization_timeout_sec:
-            self.set_thruster(MIDDLE_LEFT, self.stabilization)
-            self.set_thruster(MIDDLE_RIGHT, self.stabilization)
+            self.set_thruster(MIDDLE_LEFT, -self.stabilization)
+            self.set_thruster(MIDDLE_RIGHT, -self.stabilization)
         else:
             self.set_thruster(MIDDLE_LEFT, 0.0)
             self.set_thruster(MIDDLE_RIGHT, 0.0)

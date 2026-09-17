@@ -17,7 +17,7 @@ class StabilizationPub(Node):
         super().__init__('stabilization_node')
         
         # Parameters
-        self.kp = 3  # Proportional gain, negative because going down increases depth
+        self.kp = 3  # Proportional gain. Positive linear.z is down.
         # self.deadzone = 0.05 # deadzone in meters
         # self.deadzone_thrust = -0.2 # thrust when in deadzone
         self.max_thrust = 0.7  # Max value of twist message
