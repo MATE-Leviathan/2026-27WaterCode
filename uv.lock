@@ -20,14 +20,19 @@ dependencies = [
     { name = "lark-parser" },
     { name = "matplotlib" },
     { name = "numpy" },
-    { name = "open3d" },
     { name = "opencv-contrib-python" },
+    { name = "pandas" },
     { name = "plankapy" },
     { name = "pybind11" },
     { name = "pyserial" },
     { name = "pyyaml" },
     { name = "setuptools" },
     { name = "transforms3d" },
+]
+
+[package.optional-dependencies]
+reconstruction = [
+    { name = "open3d" },
 ]
 
 [package.metadata]
@@ -37,8 +42,9 @@ requires-dist = [
     { name = "lark-parser", specifier = ">=0.12.0" },
     { name = "matplotlib", specifier = ">=3.10.7" },
     { name = "numpy", specifier = "<2" },
-    { name = "open3d", specifier = ">=0.19.0" },
+    { name = "open3d", marker = "extra == 'reconstruction'", specifier = ">=0.19.0" },
     { name = "opencv-contrib-python", specifier = "<4.10.0.84" },
+    { name = "pandas" },
     { name = "plankapy", specifier = ">=1.0.2" },
     { name = "pybind11", specifier = ">=3.0.1" },
     { name = "pyserial", specifier = ">=3.5" },
@@ -46,6 +52,7 @@ requires-dist = [
     { name = "setuptools", specifier = ">=80.9.0" },
     { name = "transforms3d", specifier = ">=0.4.2" },
 ]
+provides-extras = ["reconstruction"]
 
 [[package]]
 name = "addict"
