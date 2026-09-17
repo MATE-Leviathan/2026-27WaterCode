@@ -89,7 +89,7 @@ class DriveRunner(Node):
 
     def set_thruster(self, index, value):
         value = min(max(value, -1), 1)  # Keeping it in bounds
-        value = value if value < 0 else value * THRUST_SCALE_FACTOR
+        value *= THRUST_SCALE_FACTOR
         self.thruster_values[index] = value
         self.get_logger().debug(f'Thruster {index}: {value}')
 
