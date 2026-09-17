@@ -83,7 +83,7 @@ RUN apt-get update && apt-get install -y \
     vim \
     xorg-dev \
     i2c-tools \
-    libgpiod-dev \ 
+    libgpiod-dev \
     python3-libgpiod \
     ~nros-humble-rqt*
 
@@ -113,9 +113,8 @@ RUN echo "source /opt/ros/humble/setup.bash" >> /home/ubuntu/.bashrc
 RUN echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> /home/ubuntu/.bashrc
 RUN echo "source /usr/share/colcon_cd/function/colcon_cd.sh" >> /home/ubuntu/.bashrc
 RUN echo "export _colcon_cd_root=/opt/ros/humble/" >> /home/ubuntu/.bashrc
-RUN echo "source /home/ubuntu/24-25WaterCode/scripts/command_aliases.sh" >> /home/ubuntu/.bashrc
+RUN echo "source /home/ubuntu/2026-27WaterCode/scripts/command_aliases.sh" >> /home/ubuntu/.bashrc
 RUN echo 'export PS1="\[\e[1;36m\]Fish\[\e[1;35m\]ROS \[\e[1;32m\]\w\[\e[0m\] -> "' >> /home/ubuntu/.bashrc
-RUN echo 'source /home/ubuntu/24-25WaterCode/.venv/bin/activate' >> /home/ubuntu/.bashrc
 
 # RUN apt-get autoremove -y \
 #     && apt-get clean -y \

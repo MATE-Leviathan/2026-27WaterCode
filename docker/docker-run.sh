@@ -8,7 +8,7 @@ set -o pipefail
 
 docker run "$@" -it --net=host -v  /tmp/.X11-unix:/tmp/.X11-unix \
  -e "TERM=xterm-256color" \
- -v $HOME/24-25WaterCode:/home/ubuntu/.24-25WaterCode.readonly \
+ -v $HOME/2026-27WaterCode:/home/ubuntu/.2026-27WaterCode.readonly \
  --ipc=host \
  -v /dev:/dev --privileged \
  --shm-size=8G \

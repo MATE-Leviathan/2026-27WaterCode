@@ -9,8 +9,8 @@ services:
       - DISPLAY=${DISPLAY}
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - ../../24-25WaterCode:/home/ubuntu/.24-25WaterCode.readonly
-      - ../../holoocean-ros/holoocean_interfaces:/home/ubuntu/.24-25WaterCode.readonly/fishROS_ws/src/holoocean_interfaces
+      - ..:/home/ubuntu/.2026-27WaterCode.readonly
+      - ../../holoocean-ros/holoocean_interfaces:/home/ubuntu/.2026-27WaterCode.readonly/fishROS_ws/src/holoocean_interfaces
       - /dev:/dev
     privileged: true
     network_mode: host

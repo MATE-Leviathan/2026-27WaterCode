@@ -38,7 +38,7 @@ if [ "$EUID" -eq 0 ]; then
     exit 1
 fi
 
-print_header "24-25WaterCode & HoloOcean Installation Script"
+print_header "2026-27WaterCode & HoloOcean Installation Script"
 echo ""
 
 # ============================================================================
@@ -146,13 +146,13 @@ echo ""
 CODE_DIR="$HOME"
 mkdir -p "$CODE_DIR"
 
-# Clone 24-25WaterCode
-if [ -d "$CODE_DIR/24-25WaterCode" ]; then
-    print_success "24-25WaterCode repository already exists"
+# Clone 2026-27WaterCode
+if [ -d "$CODE_DIR/2026-27WaterCode" ]; then
+    print_success "2026-27WaterCode repository already exists"
 else
-    print_info "Cloning 24-25WaterCode..."
-    git clone git@github.com:MATE-Leviathan/24-25WaterCode.git "$CODE_DIR/24-25WaterCode"
-    print_success "24-25WaterCode cloned successfully"
+    print_info "Cloning 2026-27WaterCode..."
+    git clone git@github.com:MATE-Leviathan/2026-27WaterCode.git "$CODE_DIR/2026-27WaterCode"
+    print_success "2026-27WaterCode cloned successfully"
 fi
 
 # Clone holoocean-ros
@@ -214,12 +214,12 @@ print_success "All components have been installed successfully!"
 echo ""
 print_info "Next steps:"
 echo "  1. Navigate to the docker directory:"
-echo "     cd $CODE_DIR/24-25WaterCode/docker"
+echo "     cd $CODE_DIR/2026-27WaterCode/docker"
 echo ""
 echo "  2. Run the setup script:"
-echo "     ./setup.sh          # For 24-25WaterCode only"
-echo "     ./setup.sh -H       # For 24-25WaterCode + HoloOcean with NVIDIA GPU"
-echo "     ./setup.sh -N       # For 24-25WaterCode + HoloOcean without NVIDIA"
+echo "     ./setup.sh          # For 2026-27WaterCode only"
+echo "     ./setup.sh -H       # For 2026-27WaterCode + HoloOcean with NVIDIA GPU"
+echo "     ./setup.sh -N       # For 2026-27WaterCode + HoloOcean without NVIDIA"
 echo ""
 print_info "For more information, see: SETUP_GUIDE.md"
 echo ""

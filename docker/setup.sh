@@ -1,9 +1,9 @@
 #!/bin/bash
 
 Help() {
-  echo "Run without options to start 24-25WaterCode only"
-  echo "Run with -H to start 24-25WaterCode + HoloOcean w/ Nvidia"
-  echo "Run with -N to start 24-25WaterCode + HoloOcean w/o Nvidia"
+  echo "Run without options to start 2026-27WaterCode only"
+  echo "Run with -H to start 2026-27WaterCode + HoloOcean w/ Nvidia"
+  echo "Run with -N to start 2026-27WaterCode + HoloOcean w/o Nvidia"
 }
 
 while getopts "hHN" option; do
