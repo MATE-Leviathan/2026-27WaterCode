@@ -10,6 +10,7 @@ import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Bool, Float32, Int32
+from rclpy.qos import QoSProfile, HistoryPolicy, ReliabilityPolicy
 
 class StabilizationPub(Node):
     def __init__(self):
@@ -43,11 +44,18 @@ class StabilizationPub(Node):
             'stabilization_toggle', 
             self.toggle_callback, 
             10)
+        # controller_node publishes twist best effort, and a reliable
+        # subscription never matches a best-effort publisher
+        twist_qos = QoSProfile(
+            history=HistoryPolicy.KEEP_LAST,
+            depth=1,
+            reliability=ReliabilityPolicy.BEST_EFFORT,
+        )
         self.twistSub = self.create_subscription(
             Twist, 
             'twist', 
             self.manual_input_callback, 
-            10)
+            twist_qos)
         
         # Publishers
         self.stab_pub = self.create_publisher(Twist, 'stabilization', 10)
