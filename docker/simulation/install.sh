@@ -32,74 +32,19 @@ print_info() {
     echo -e "${BLUE}ℹ $1${NC}"
 }
 
-# Check if running as root
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 if [ "$EUID" -eq 0 ]; then
-    print_error "Please do not run this script as root or with sudo"
+    print_error "Run this script as your normal user, without sudo."
     exit 1
 fi
-
-print_header "2026-27WaterCode & HoloOcean Installation Script"
-echo ""
-
-# ============================================================================
-# 1. Check and install basic utilities
-# ============================================================================
-print_header "Step 1: Installing Basic Utilities"
-echo ""
-
-print_info "Updating package lists..."
-sudo apt update -qq
-
-PACKAGES="ca-certificates curl gnupg2 git python3-pip python3-venv"
-print_info "Installing: $PACKAGES"
-sudo apt install -y $PACKAGES > /dev/null 2>&1
-print_success "Basic utilities installed"
-echo ""
-
-# ============================================================================
-# 2. Check and install Docker
-# ============================================================================
-print_header "Step 2: Docker Installation"
-echo ""
-
-if command -v docker &> /dev/null; then
-    print_success "Docker is already installed ($(docker --version))"
-else
-    print_info "Installing Docker..."
-
-    # Add Docker's GPG key
-    sudo install -m 0755 -d /etc/apt/keyrings
-    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-    sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-    # Add Docker repository
-    sudo tee /etc/apt/sources.list.d/docker.sources <<EOF > /dev/null
-Types: deb
-URIs: https://download.docker.com/linux/ubuntu
-Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
-Components: stable
-Signed-By: /etc/apt/keyrings/docker.asc
-EOF
-
-    # Install Docker
-    sudo apt update -qq
-    sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin > /dev/null 2>&1
-
-    print_success "Docker installed successfully"
+if ! command -v apt >/dev/null 2>&1; then
+    print_error "This simulation installer requires Ubuntu. See SETUP_GUIDE.md for manual setup."
+    exit 1
 fi
-
-# Add user to docker group
-if groups $USER | grep -q '\bdocker\b'; then
-    print_success "User $USER is already in the docker group"
-else
-    print_info "Adding user $USER to docker group..."
-    sudo usermod -aG docker $USER
-    print_warning "You need to log out and log back in for docker group changes to take effect!"
-    print_warning "After logging back in, run this script again to continue."
-    exit 0
+if ! docker compose version >/dev/null 2>&1; then
+    print_error "Install Docker Engine and Docker Compose first. See docker/SETUP_GUIDE.md."
+    exit 1
 fi
-echo ""
-
 # ============================================================================
 # 3. Check and install NVIDIA Container Toolkit (optional)
 # ============================================================================
@@ -143,17 +88,8 @@ echo ""
 print_header "Step 4: Cloning Repositories"
 echo ""
 
-CODE_DIR="$HOME"
+CODE_DIR="$(cd "$script_dir/../../.." && pwd)"
 mkdir -p "$CODE_DIR"
-
-# Clone 2026-27WaterCode
-if [ -d "$CODE_DIR/2026-27WaterCode" ]; then
-    print_success "2026-27WaterCode repository already exists"
-else
-    print_info "Cloning 2026-27WaterCode..."
-    git clone git@github.com:MATE-Leviathan/2026-27WaterCode.git "$CODE_DIR/2026-27WaterCode"
-    print_success "2026-27WaterCode cloned successfully"
-fi
 
 # Clone holoocean-ros
 if [ -d "$CODE_DIR/holoocean-ros" ]; then
@@ -196,30 +132,15 @@ fi
 # Install HoloOcean client
 print_info "Installing HoloOcean Python client..."
 cd "$CODE_DIR/HoloOcean/client"
-pip3 install -e . > /dev/null 2>&1
+python3 -m venv .venv
+.venv/bin/python -m pip install -e .
 print_success "HoloOcean client installed"
 
 # Install Ocean world package
 print_info "Installing Ocean world package (this may take a while)..."
-python3 -c "import holoocean; holoocean.install('Ocean')"
+.venv/bin/python -c "import holoocean; holoocean.install('Ocean')"
 print_success "Ocean world package installed to ~/.local/share/holoocean/"
 echo ""
 
-# ============================================================================
-# Complete!
-# ============================================================================
-print_header "Installation Complete!"
-echo ""
-print_success "All components have been installed successfully!"
-echo ""
-print_info "Next steps:"
-echo "  1. Navigate to the docker directory:"
-echo "     cd $CODE_DIR/2026-27WaterCode/docker"
-echo ""
-echo "  2. Run the setup script:"
-echo "     ./setup.sh          # For 2026-27WaterCode only"
-echo "     ./setup.sh -H       # For 2026-27WaterCode + HoloOcean with NVIDIA GPU"
-echo "     ./setup.sh -N       # For 2026-27WaterCode + HoloOcean without NVIDIA"
-echo ""
-print_info "For more information, see: SETUP_GUIDE.md"
-echo ""
+print_success "Simulation dependencies installed."
+print_info "Start: bash $script_dir/setup.sh -H (NVIDIA) or -N (without NVIDIA)."

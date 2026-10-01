@@ -1,22 +1,7 @@
-#!/bin/bash
-
-Help() {
-  echo "Run without options to enter leviathan"
-  echo "Run with -H to enter holoocean-ros"
-}
-
-while getopts "hH" option; do
-  case $option in
-    h)
-      Help
-      exit;;
-    H)
-      docker exec -it holoocean-ros /bin/bash
-      exit;;
-    \?)
-      Help
-      exit;;
-  esac
-done
-
-docker exec -it leviathan /bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+case "${1:-}" in
+  -h|--help) echo "Enter competition: bash docker/enter.sh"; exit 0 ;;
+  "") docker exec -it leviathan /bin/bash ;;
+  *) echo "For HoloOcean, use docker/simulation/enter.sh." >&2; exit 1 ;;
+esac

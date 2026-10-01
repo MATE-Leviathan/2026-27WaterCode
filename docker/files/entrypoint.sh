@@ -7,13 +7,13 @@ set -e
 # If there's a mismatch, use bindfs to remap the user and group
 # to be ubuntu:ubuntu. Try to avoid this if possible since it
 # seems to slow down builds in some cases
-readonly_root=/home/ubuntu/.2026-27WaterCode.readonly
+mounted_root=/home/ubuntu/.2026-27WaterCode
 writable_root=/home/ubuntu/2026-27WaterCode
-readme="$readonly_root/README.md"
+readme="$mounted_root/README.md"
 
 if [[ ! -e "$readme" ]]; then
-	echo "Robot code is not mounted at $readonly_root" >&2
-	echo "Mount the repo there (compose volume ..:$readonly_root) and retry." >&2
+	echo "Robot code is not mounted at $mounted_root" >&2
+	echo "Mount the repo there (compose volume ..:$mounted_root) and retry." >&2
 	exit 1
 fi
 
@@ -21,7 +21,7 @@ id=$(stat -c '%u' "$readme")
 
 if [[ $id == "1000" ]] ; then
 	if [[ ! -e "$writable_root" ]]; then
-		ln -sf "$readonly_root" "$writable_root"
+		ln -sf "$mounted_root" "$writable_root"
 	fi
 else
 	mkdir -p "$writable_root"
@@ -32,7 +32,7 @@ else
 	echo ubuntu | sudo -p "" -kS bindfs --force-user=ubuntu --force-group=ubuntu \
 		--create-for-user=1000 --create-for-group=1000 \
 		--chown-ignore --chgrp-ignore \
-		"$readonly_root" "$writable_root" > /dev/null 2>&1
+		"$mounted_root" "$writable_root" > /dev/null 2>&1
 fi
 
 # Do not auto-activate a venv. Humble's python3.10 has rclpy, and a
