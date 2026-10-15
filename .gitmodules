@@ -1,0 +1,3 @@
+[submodule "fishROS_ws/src/sonoptix_sonar"]
+    path = fishROS_ws/src/sonoptix_sonar
+    url = https://github.com/itskalvik/sonoptix_sonar.git
