@@ -12,6 +12,7 @@ RUN mkdir -p /root/.ssh &&\
     chown root:root /root/.ssh /root/.ssh/* &&\
     rm ../jetson_dot_ssh.tar.bz2
 
+
 ARG WORKSPACE=humble_dev_ws
 # Grab the cross build basics and uninstall the web browser to save ~ 250MB of space: 
 RUN apt update &&\
@@ -56,6 +57,8 @@ RUN apt-get update && apt-get install -y \
     nano \
     python3-pip \
     python3-pydantic \
+    ros-humble-gazebo-ros \
+    ros-humble-gazebo-ros-pkgs \
     ros-humble-joint-state-publisher \
     ros-humble-robot-localization \
     #ros-foxy-plotjuggler-ros \                  doesn't have in Humble
@@ -66,12 +69,15 @@ RUN apt-get update && apt-get install -y \
     ros-humble-rmw-fastrtps-cpp \
     ros-humble-rmw-cyclonedds-cpp \
     ros-humble-slam-toolbox \
+    ros-humble-turtlebot3 \
+    ros-humble-turtlebot3-msgs \
     ros-humble-twist-mux \
     ros-humble-usb-cam \
     ros-humble-joy-linux \
     ros-humble-xacro \
     ros-humble-foxglove-bridge \
     ruby-dev \
+    rviz \
     tmux \
     wget \
     vim \
@@ -83,6 +89,19 @@ RUN apt-get update && apt-get install -y \
 
 # VERY IMPORTANT, COLCON EATS YOUR MEMORY WITHOUT IT
 RUN pip3 install setuptools==58.2.0
+
+# install vscode
+RUN apt update &&\
+    apt install -y wget gpg &&\
+    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg &&\
+    install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg &&\
+    sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list' &&\
+    rm -f packages.microsoft.gpg &&\
+    apt install -y apt-transport-https &&\
+    apt update &&\
+    apt install -y code &&\
+    rm -rf /var/lib/apt/lists/* &&\
+    apt clean 
 
 # RUN wget https://github.com/openrr/urdf-viz/releases/download/v0.38.2/urdf-viz-x86_64-unknown-linux-gnu.tar.gz && \
 #     tar -xvzf urdf-viz-x86_64-unknown-linux-gnu.tar.gz -C /usr/local/bin/ && \
