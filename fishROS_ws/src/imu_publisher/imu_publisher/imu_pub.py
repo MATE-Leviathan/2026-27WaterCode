@@ -1,4 +1,4 @@
-#!/usr/bin/env
+#!/usr/bin/env python3
 
 """
 Date Created: 04/27/2024
@@ -10,7 +10,6 @@ Publishers: IMU
 
 import rclpy
 import busio
-import time
 import adafruit_bno055
 import tf_transformations
 from rclpy.node import Node
