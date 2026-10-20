@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  colcon:
+    name: colcon build
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: ros-tooling/setup-ros@v0.7
+        with:
+          required-ros-distributions: humble
+
+      - name: Install dependencies
+        run: |
+          set -eux
+          sudo apt-get update
+          sudo apt-get install -y python3-colcon-common-extensions python3-rosdep
+          sudo rosdep init || true
+          rosdep update
+          # Source packages and the empty internal_temp script are not rosdep keys.
+          rosdep install \
+            --from-paths fishROS_ws/src \
+            --ignore-src \
+            --rosdistro humble \
+            -y \
+            --skip-keys "sonoptix_sonar"
+
+      - name: Build workspace
+        shell: bash
+        run: |
+          set -eux
+          source /opt/ros/humble/setup.bash
+          cd fishROS_ws
+          # Build only. Do not launch nodes or open serial, camera, or I2C devices.
+          colcon build --symlink-install --event-handlers console_direct+
