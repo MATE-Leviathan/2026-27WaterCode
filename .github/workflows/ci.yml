@@ -35,8 +35,10 @@ jobs:
       - name: Build workspace
         shell: bash
         run: |
-          set -eux
+          set -ex
+          set +u
           source /opt/ros/humble/setup.bash
+          set -u
           cd fishROS_ws
           # Build only. Do not launch nodes or open serial, camera, or I2C devices.
           colcon build --symlink-install --event-handlers console_direct+
