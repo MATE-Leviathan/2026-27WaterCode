@@ -3,8 +3,8 @@
 <package format="3">
   <name>imu_publisher</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="ubuntu@todo.todo">ubuntu</maintainer>
+  <description>Publishes data from an Adafruit BNO055 IMU.</description>
+  <maintainer email="ncssmunderwaterrobotics@gmail.com">NCCSMUnderwaterRobotics</maintainer>
   <license>TODO: License declaration</license>
 
   <test_depend>ament_copyright</test_depend>

@@ -12,9 +12,9 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='ubuntu',
-    maintainer_email='ubuntu@todo.todo',
-    description='TODO: Package description',
+    maintainer='NCCSMUnderwaterRobotics',
+    maintainer_email='ncssmunderwaterrobotics@gmail.com',
+    description='Blue Robotics Bar02 pressure/depth and temperature sensor',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={

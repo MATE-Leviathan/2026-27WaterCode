@@ -4,7 +4,7 @@
   <name>sensor_bringup</name>
   <version>0.0.0</version>
   <description>Launch and serial bringup for Leviathan sensors.</description>
-  <maintainer email="ubuntu@todo.todo">ubuntu</maintainer>
+  <maintainer email="ncssmunderwaterrobotics@gmail.com">NCCSMUnderwaterRobotics</maintainer>
   <license>TODO: License declaration</license>
 
   <exec_depend>bar02_pub</exec_depend>
