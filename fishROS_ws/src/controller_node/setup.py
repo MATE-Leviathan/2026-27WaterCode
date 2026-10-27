@@ -23,6 +23,7 @@ setup(
     description='Contains joystick, drivetrain, auxiliary actuator, sonar, and HoloOcean control nodes.',
     license='TODO: License declaration',
     tests_require=['pytest'],
+    # TODO: Fix for new thruster package.
     entry_points={
         'console_scripts': [
             'drivetrain_node = controller_node.twist_drivetrain:main',

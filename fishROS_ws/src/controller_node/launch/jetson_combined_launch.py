@@ -28,6 +28,7 @@ def generate_launch_description():
             #     package='bar02_pub',
             #     executable='bar02_pub',
             # ),
+            # TODO: Change this to work with the new thruster package
             Node(
                 package='controller_node',
                 executable='drivetrain_node',
