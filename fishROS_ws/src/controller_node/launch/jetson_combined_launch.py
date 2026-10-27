@@ -1,6 +1,7 @@
 """
 Launch File to set up Jetson nodes.
-Launches the cameras, depth sensor, drive runner, stabilization, the pH sensor, and the foxglove websocket
+Launches the two cameras and the drive runner. The depth sensor, stabilization,
+pH sensor and foxglove websocket are commented out below.
 
 Run: colcon build
 Then Run: ros2 launch controller_node jetson_combined_launch.py

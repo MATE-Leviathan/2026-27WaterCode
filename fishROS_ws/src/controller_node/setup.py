@@ -27,6 +27,7 @@ setup(
         'console_scripts': [
             'drivetrain_node = controller_node.twist_drivetrain:main',
             'controller_node = controller_node.controller_sub:main',
+            'auxiliary_control = controller_node.auxiliary_control:main',
             'sonar_cam_message_converter = controller_node.sonar_cam_message_converter:main',
         ],
     },
