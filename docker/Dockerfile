@@ -5,14 +5,6 @@ COPY ./files/entrypoint.sh /
 RUN chmod a+x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
-COPY ./files/jetson_dot_ssh.tar.bz2 /root
-RUN mkdir -p /root/.ssh &&\
-    cd /root/.ssh &&\
-    tar -xjf ../jetson_dot_ssh.tar.bz2 &&\
-    chown root:root /root/.ssh /root/.ssh/* &&\
-    rm ../jetson_dot_ssh.tar.bz2
-
-
 ARG WORKSPACE=humble_dev_ws
 # Grab the cross build basics and uninstall the web browser to save ~ 250MB of space: 
 RUN apt update &&\
